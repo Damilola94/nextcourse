@@ -1,4 +1,4 @@
-// import { MongoClient, ObjectId } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import { Fragment } from "react";
 import Head from "next/head";
 
@@ -22,39 +22,25 @@ function MeetupDetails(props) {
 }
 
 export async function getStaticPaths() {
-  //   const client = await MongoClient.connect(
-  //     "mongodb+srv://damilola94:damilola94@cluster0.ncmszgu.mongodb.net/meetup?retryWrites=true&w=majority"
-  //   );
+  const client = await MongoClient.connect(
+    "mongodb+srv://damilola94:damilola94@cluster0.ncmszgu.mongodb.net/meetup?retryWrites=true&w=majority"
+  );
 
-  //   const db = client.db();
+  const db = client.db();
 
-  //   const meetupCollection = db.collection("meetup");
+  const meetupCollection = db.collection("meetup");
 
-  //   const meetups = await meetupCollection.find({}, { _id: 1 }).toArray();
+  const meetups = await meetupCollection.find({}, { _id: 1 }).toArray();
 
-  //   client.close();
+  client.close();
 
   return {
     fallback: "blocking",
-    paths:
-      // meetups.map((meetup) => ({
-      //   params: {
-      //     meetupId: meetup._id.toString(),
-      //   },
-      // })),
-
-      [
-        {
-          params: {
-            meetupId: "m1",
-          },
-        },
-        {
-          params: {
-            meetupId: "m2",
-          },
-        },
-      ],
+    paths: meetups.map((meetup) => ({
+      params: {
+        meetupId: meetup._id.toString(),
+      },
+    })),
   };
 }
 
@@ -63,38 +49,28 @@ export async function getStaticProps(context) {
 
   const meetupId = context.params.meetupId;
 
-  //   const client = await MongoClient.connect(
-  //     "mongodb+srv://damilola94:damilola94@cluster0.ncmszgu.mongodb.net/meetup?retryWrites=true&w=majority"
-  //   );
+  const client = await MongoClient.connect(
+    "mongodb+srv://damilola94:damilola94@cluster0.ncmszgu.mongodb.net/meetup?retryWrites=true&w=majority"
+  );
 
-  //   const db = client.db();
+  const db = client.db();
 
-  //   const meetupCollection = db.collection("meetup");
+  const meetupCollection = db.collection("meetup");
 
-  //   const selectedMeetup = await meetupCollection.findOne({
-  //     _id: ObjectId(meetupId),
-  //   });
+  const selectedMeetup = await meetupCollection.findOne({
+    _id: ObjectId(meetupId),
+  });
 
-  //   client.close();
-
-  //   console.log(meetupId);
+  client.close();
 
   return {
     props: {
-      //   meetupData: {
-      //     id: selectedMeetup._id,
-      //     title: selectedMeetup.title,
-      //     address: selectedMeetup.address,
-      //     image: selectedMeetup.image,
-      //     description: selectedMeetup.description,
-      //   },
       meetupData: {
-        image:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXM9hUg7cC4iBVD-y5i-DgY5ulIDALSdfjUTizXC1MlkwyZiUBUxbpwmCkTvfmNkI8i9w&usqp=CAU",
-        id: meetupId,
-        title: "A First Meetup",
-        address: "Some Street 5, Some City",
-        description: "The meetup descriptiom",
+        id: selectedMeetup._id.toString(),
+        title: selectedMeetup.title,
+        address: selectedMeetup.address,
+        image: selectedMeetup.image,
+        description: selectedMeetup.description,
       },
     },
   };

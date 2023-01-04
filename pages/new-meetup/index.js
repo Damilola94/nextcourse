@@ -12,10 +12,7 @@ function NewMeetupPage() {
         "Content-Type": "application/json",
       },
     });
-
     const data = await response.json();
-
-    console.log(data, "man");
   }
 
   return (
